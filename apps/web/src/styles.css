@@ -1,0 +1,11 @@
+@import "tailwindcss";
+
+@layer base {
+  body { margin: 0; background: #f8faf9; color: #172b35; font-family: system-ui, sans-serif; }
+  a { text-underline-offset: 4px; }
+  nav a:hover { text-decoration: underline; }
+  :focus-visible { outline: 3px solid #0f766e; outline-offset: 4px; }
+  section { scroll-margin-top: 1rem; }
+}
+.skip-link { position: absolute; top: -5rem; left: 1rem; padding: 0.75rem; background: white; z-index: 10; }
+.skip-link:focus { top: 1rem; }

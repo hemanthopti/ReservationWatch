@@ -28,3 +28,38 @@ Use environment variables, parameterized ORM queries, rate limiting, admin authe
 
 ## Development
 Local development -> GitHub feature branch -> reviewed PR -> tested Hostinger deploy. Never merge/provision real production data without owner approval.
+
+## Decision: issue #1 scaffold (2026-10-17)
+
+Use Node.js 24 and npm workspaces with one lockfile. React/Vite and Tailwind CSS
+provide the minimal public homepage; native semantic elements suffice at this
+stage, with shadcn/ui deferred until interactive components require it. No records,
+legal claims or community fixtures are introduced. Shared API types live in
+`packages/shared`; type-only consumption allows development without a separate
+shared-package watcher. Builds still compile that package first.
+
+Vite proxies `/api` in development. In production, Fastify serves the Vite output
+and health route in one process, using a path relative to the compiled server.
+This avoids CORS configuration and an additional production frontend service.
+Unrecognized API/asset requests remain 404; browser HTML requests can receive the
+SPA shell. Configuration uses environment variables and validates PORT. Node's
+environment-file support is used locally; hosting supplies production variables.
+
+Hostinger documentation confirms platform support for Fastify and Node 24. Actual
+account settings, workspace build/artifact retention and runtime behavior still
+need hPanel validation before deployment; see [deployment approach](deployment.md).
+No production access, database integration, migrations or deployment are included.
+Tests cover health, routing boundaries and configuration; a separate smoke command
+exercises the compiled server and real built assets over HTTP.
+
+
+## Review correction: development binding and browser checks
+
+When HOST is absent, non-production binds to 127.0.0.1; production binds to
+0.0.0.0 for the hosting proxy. Explicit HOST remains authoritative. Regression
+tests cover unset/development/test/production environments and overrides.
+A small Playwright harness verifies the scaffold in desktop and mobile-sized
+Chromium, including the Vite health proxy, status states and keyboard navigation.
+Browser binaries and screenshots stay local and ignored; no runtime service is added.
+Health status ignores settled requests from cleaned-up effects so development
+StrictMode cancellation cannot replace the current loading/success state.
