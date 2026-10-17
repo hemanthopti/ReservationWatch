@@ -23,7 +23,7 @@ Develop locally in VS Code, use Codex for implementation, review changes in GitH
 
 ## Project setup status
 
-This repository is being initialized with instructions and architecture documents before implementation. See `AGENTS.md` for Codex conventions and `docs/` for product and technical specifications.
+Issue #1 provides a local-first workspace scaffold, minimal homepage and health API. See `AGENTS.md` for conventions and `docs/` for product and technical specifications.
 
 ## Working practices
 
@@ -36,3 +36,48 @@ This repository is being initialized with instructions and architecture document
 ## Next steps
 
 See GitHub issues for the implementation backlog. Initial code should be developed locally and submitted as a pull request.
+
+## Local development (Node.js 24)
+
+From the repository root, with Node.js 24 and npm installed:
+
+```sh
+npm ci
+npm run dev
+```
+
+Open http://localhost:5173. Vite proxies `/api` to Fastify at
+http://127.0.0.1:3000; `GET /api/health` returns
+`{"status":"ok","service":"reservation-watch-api"}`. Stop both with Ctrl+C.
+No database, credentials or external services are required.
+
+Optional: copy `.env.example` to `.env` in the repository root to change API
+`PORT` or `HOST`. Both dev processes use the root configuration; leave
+`NODE_ENV=development` locally. Vite uses port 5173 and fails clearly if occupied.
+Do not store secrets in `VITE_*` variables (they are public browser configuration).
+
+```sh
+npm run lint
+npm run typecheck
+npm test
+npm run build
+npm run test:production
+NODE_ENV=production npm start
+```
+
+The last command serves both the frontend and API at http://localhost:3000
+(or the configured port). Build first. `npm run test:production` starts and stops
+the compiled production server on port 43189; set `SMOKE_PORT` if occupied.
+`npm start` does not build or run a Vite development server.
+
+## Workspace layout
+
+- `apps/web`: React, TypeScript, Vite and Tailwind CSS homepage.
+- `apps/api`: Fastify health endpoint, production static serving and tests.
+- `packages/shared`: shared API contracts; consumed as types in this scaffold.
+- `scripts/smoke-production.mjs`: real HTTP smoke check of compiled outputs.
+
+The homepage describes planned sections; it contains no legal records or synthetic
+community classifications. The broader explorer, search and admin shell belong to
+later issues. See [deployment instructions](docs/deployment.md) for the proposed
+single-process Hostinger setup and the checks still needed in hPanel.
