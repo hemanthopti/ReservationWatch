@@ -33,8 +33,13 @@ try {
   const assets = [...html.matchAll(/(?:src|href)="(\/assets\/[^"]+)"/g)];
   assert.ok(assets.length >= 2, 'Expected built JavaScript and CSS');
   for (const [, asset] of assets) assert.equal((await fetch(origin + asset)).status, 200);
+  for (const route of ['/communities/example-a', '/jurisdictions/karnataka?sector=employment', '/data/demo-register']) {
+    const deepLink = await fetch(origin + route, { headers: { accept: 'text/html' } });
+    assert.equal(deepLink.status, 200, `Deep link ${route}`);
+    assert.match(await deepLink.text(), /<div id="root">/);
+  }
   assert.equal((await fetch(`${origin}/api/v1/missing`, { headers: { accept: 'text/html' } })).status, 404);
-  console.log('Production smoke passed: compiled server, health, homepage, JavaScript, CSS and API 404.');
+  console.log('Production smoke passed: compiled server, health, homepage, SPA deep links, JavaScript, CSS and API 404.');
 } finally {
   child.kill('SIGTERM');
   await exited;

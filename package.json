@@ -15,7 +15,7 @@
     "dev": "concurrently --kill-others --names api,web \"npm run dev -w @reservation-watch/api\" \"npm run dev -w @reservation-watch/web\"",
     "lint": "eslint .",
     "typecheck": "npm run typecheck --workspaces && tsc -p tests/tsconfig.json",
-    "test": "npm run test -w @reservation-watch/api",
+    "test": "npm run test --workspaces --if-present",
     "build": "npm run build -w @reservation-watch/shared && npm run build -w @reservation-watch/web && npm run build -w @reservation-watch/api",
     "start": "node --env-file-if-exists=.env apps/api/dist/server.js",
     "test:production": "node scripts/smoke-production.mjs",
