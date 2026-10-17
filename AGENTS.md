@@ -38,3 +38,10 @@ Start with an accessible, responsive UI shell and clearly synthetic sample data.
 
 ## Handoff format
 At the end of each task, report files changed, commands run, test results, assumptions and open questions.
+
+## Mandatory per-module testing and reviewer handoff
+- Read and follow `docs/quality-gates.md` **for every module**, including SETUP-001. Every feature must add relevant automated coverage and run the complete applicable check matrix after the final change.
+- Verify behavior in the running application as well as in automated tests; UI modules require mobile, desktop and basic accessibility checks. Report exact test commands, counts, pass/fail/skip statuses and any remaining gaps. Never invent test execution or results.
+- Describe precisely **what was built**, **how it works**, **how someone can use and reproduce it**, **what was tested**, **what failed or was skipped**, and **remaining limitations**.
+- Report this in the GitHub pull request using `.github/pull_request_template.md`. Mark PR as draft if any required quality gate is incomplete or failing.
+- Do not treat a pushed branch as finished; request review and pause before merge/deploy or the next issue. GitHub is the handoff path; this Codex session cannot send an unsolicited message to ChatGPT.
