@@ -4,5 +4,6 @@ export function readConfig(env: NodeJS.ProcessEnv) {
   if (!/^\d+$/.test(rawPort) || !Number.isInteger(port) || port < 1 || port > 65535) {
     throw new Error('PORT must be an integer between 1 and 65535');
   }
-  return { port, host: env.HOST ?? '0.0.0.0', production: env.NODE_ENV === 'production' };
+  const production = env.NODE_ENV === 'production';
+  return { port, host: env.HOST ?? (production ? '0.0.0.0' : '127.0.0.1'), production };
 }

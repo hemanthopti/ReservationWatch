@@ -7,3 +7,6 @@ dist/
 *.tsbuildinfo
 .npm-cache/
 .test-web-*/
+test-results/
+playwright-report/
+.playwright-browsers/

@@ -51,3 +51,15 @@ need hPanel validation before deployment; see [deployment approach](deployment.m
 No production access, database integration, migrations or deployment are included.
 Tests cover health, routing boundaries and configuration; a separate smoke command
 exercises the compiled server and real built assets over HTTP.
+
+
+## Review correction: development binding and browser checks
+
+When HOST is absent, non-production binds to 127.0.0.1; production binds to
+0.0.0.0 for the hosting proxy. Explicit HOST remains authoritative. Regression
+tests cover unset/development/test/production environments and overrides.
+A small Playwright harness verifies the scaffold in desktop and mobile-sized
+Chromium, including the Vite health proxy, status states and keyboard navigation.
+Browser binaries and screenshots stay local and ignored; no runtime service is added.
+Health status ignores settled requests from cleaned-up effects so development
+StrictMode cancellation cannot replace the current loading/success state.

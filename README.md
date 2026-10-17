@@ -52,7 +52,7 @@ http://127.0.0.1:3000; `GET /api/health` returns
 No database, credentials or external services are required.
 
 Optional: copy `.env.example` to `.env` in the repository root to change API
-`PORT` or `HOST`. Both dev processes use the root configuration; leave
+`PORT` or `HOST`. Without HOST, the API binds to loopback in development and all interfaces in production. An explicit HOST overrides either default. Both dev processes use the root configuration; leave
 `NODE_ENV=development` locally. Vite uses port 5173 and fails clearly if occupied.
 Do not store secrets in `VITE_*` variables (they are public browser configuration).
 
@@ -81,3 +81,20 @@ The homepage describes planned sections; it contains no legal records or synthet
 community classifications. The broader explorer, search and admin shell belong to
 later issues. See [deployment instructions](docs/deployment.md) for the proposed
 single-process Hostinger setup and the checks still needed in hPanel.
+
+
+### Scaffold browser checks
+
+After `npm ci`, install the test browser once (free; local download), then run:
+
+```sh
+PLAYWRIGHT_BROWSERS_PATH=.playwright-browsers npx playwright install chromium
+PLAYWRIGHT_BROWSERS_PATH=.playwright-browsers npm run test:browser
+```
+
+The harness starts isolated development
+processes on ports 43190 (API) and 43191 (Vite), then stops them. Desktop (1440×900)
+and mobile-sized Chromium (375×812) checks cover API proxy/success, loading/error
+status, horizontal overflow, skip link and keyboard navigation. Screenshots are
+written to ignored `test-results/`. These are scaffold checks, not the future
+community/search E2E suite or a full accessibility audit.

@@ -46,3 +46,20 @@ test('configuration honors hosting environment and rejects invalid ports', () =>
     assert.throws(() => readConfig({ PORT }), /PORT/);
   }
 });
+
+
+test('development defaults to loopback and production defaults to all interfaces', () => {
+  for (const NODE_ENV of [undefined, 'development', 'test']) {
+    assert.deepEqual(readConfig({ NODE_ENV }), { port: 3000, host: '127.0.0.1', production: false });
+  }
+  assert.deepEqual(readConfig({ NODE_ENV: 'production' }),
+    { port: 3000, host: '0.0.0.0', production: true });
+});
+
+test('explicit HOST overrides the default in every environment', () => {
+  for (const NODE_ENV of [undefined, 'development', 'production']) {
+    for (const HOST of ['127.0.0.1', '0.0.0.0', '::1']) {
+      assert.equal(readConfig({ NODE_ENV, HOST }).host, HOST);
+    }
+  }
+});
