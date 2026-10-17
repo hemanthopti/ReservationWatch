@@ -23,7 +23,7 @@ Develop locally in VS Code, use Codex for implementation, review changes in GitH
 
 ## Project setup status
 
-Issue #1 provides a local-first workspace scaffold, minimal homepage and health API. See `AGENTS.md` for conventions and `docs/` for product and technical specifications.
+Issues #1 and #2 provide a local-first workspace and a complete interactive frontend demonstration. See `AGENTS.md` for conventions and `docs/` for product and technical specifications.
 
 ## Working practices
 
@@ -72,18 +72,18 @@ the compiled production server on port 43189; set `SMOKE_PORT` if occupied.
 
 ## Workspace layout
 
-- `apps/web`: React, TypeScript, Vite and Tailwind CSS homepage.
+- `apps/web`: React, TypeScript, Vite, React Router and Tailwind CSS research prototype.
 - `apps/api`: Fastify health endpoint, production static serving and tests.
 - `packages/shared`: shared API contracts; consumed as types in this scaffold.
 - `scripts/smoke-production.mjs`: real HTTP smoke check of compiled outputs.
 
-The homepage describes planned sections; it contains no legal records or synthetic
-community classifications. The broader explorer, search and admin shell belong to
-later issues. See [deployment instructions](docs/deployment.md) for the proposed
+All portal sections are interactive against fictional local fixtures. No records
+represent real communities, classifications, quotas, research or legal history.
+The admin interface is explicitly coming later. See [deployment instructions](docs/deployment.md) for the proposed
 single-process Hostinger setup and the checks still needed in hPanel.
 
 
-### Scaffold browser checks
+### Prototype browser checks
 
 After `npm ci`, install the test browser once (free; local download), then run:
 
@@ -94,7 +94,41 @@ PLAYWRIGHT_BROWSERS_PATH=.playwright-browsers npm run test:browser
 
 The harness starts isolated development
 processes on ports 43190 (API) and 43191 (Vite), then stops them. Desktop (1440×900)
-and mobile-sized Chromium (375×812) checks cover API proxy/success, loading/error
-status, horizontal overflow, skip link and keyboard navigation. Screenshots are
-written to ignored `test-results/`. These are scaffold checks, not the future
-community/search E2E suite or a full accessibility audit.
+and mobile-sized Chromium (375×812) checks cover API status, navigation, search and filters, independent community
+records, comparison, chart selection, study details, debate selection, timeline,
+exports, horizontal overflow, skip link and keyboard navigation. Screenshots are
+written to ignored `test-results/`. These are representative Chromium workflows, not a full accessibility audit or
+physical-device/browser compatibility certification.
+
+
+## Interactive prototype walkthrough (UI-001)
+
+All content is **synthetic demonstration only**. Centre and Karnataka are navigation
+labels; the prototype does not describe their actual laws or policies. No account,
+new API endpoint, external data service or database is needed.
+
+| Route | Try it |
+| --- | --- |
+| `/` | Type `example d` in the hero or header search; use ↑/↓ and Enter on suggestions |
+| `/search?q=imaginary` | Filter global results by record type; try a no-match query |
+| `/rules` | Switch jurisdiction and sector; expand a rule's version history |
+| `/jurisdictions/karnataka` | Change sector and the synthetic "as of" date; include superseded records |
+| `/communities` | Search, filter by jurisdiction/sector/category, sort, reset; open an identity |
+| `/communities/example-d` | Independent entries (one superseded) and a similar-name warning |
+| `/compare` | Swap sides, pick the same jurisdiction twice (guidance appears), toggle sectors, change chart metric, select a bar |
+| `/reach` | Change year/sector/institution; select bars and trend points; read the table equivalents |
+| `/effects` | Filter imaginary studies by topic/design/jurisdiction; expand methods, results and limitations |
+| `/debates` | Change the question; show normative-only or empirical-only statements |
+| `/history` | Use the year rail, subject/jurisdiction/year-range filters; expand an event |
+| `/data` | Filter the source registry; export filtered sources or full datasets as labelled CSV/JSON |
+| `/data/demo-register` | Provenance, separate dates, usage counts and audit history; no fake document |
+
+Filter state is stored in URL query parameters; details and selected panels can be
+bookmarked. Browser back/forward and production HTML deep links are supported.
+Document previews explicitly explain that no real document exists. Exports are
+browser-generated, label every record as synthetic, and are disabled when empty.
+
+`npm test` runs API/configuration and data utility tests. Browser screenshots are
+saved under ignored `test-results/` (home, comparison and reach). Run the browser suite above, then open the PNGs locally to review desktop
+and mobile layouts. The existing API remains health-only. GitHub Actions (Issue #5)
+is deferred; this sprint does not add workflows.
